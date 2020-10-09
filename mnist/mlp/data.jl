@@ -1,10 +1,10 @@
-using Colors
+using Images.Colors
 
 # mnist数据文件路径
-const TRAINIMAGES ="D:\\Explore\\Common\\mnist\\train-images-idx3-ubyte"
-const TRAINLABELS ="D:\\Explore\\Common\\mnist\\train-labels-idx1-ubyte"
-const TESTIMAGES = "D:\\Explore\\Common\\mnist\\t10k-images-idx3-ubyte"
-const TESTLABELS = "D:\\Explore\\Common\\mnist\\t10k-labels-idx1-ubyte"
+const TRAINIMAGES ="D:\\Explore\\DataSets\\mnist\\train-images-idx3-ubyte"
+const TRAINLABELS ="D:\\Explore\\DataSets\\mnist\\train-labels-idx1-ubyte"
+const TESTIMAGES = "D:\\Explore\\DataSets\\mnist\\t10k-images-idx3-ubyte"
+const TESTLABELS = "D:\\Explore\\DataSets\\mnist\\t10k-labels-idx1-ubyte"
 
 const Gray = Colors.Gray{Colors.N0f8}
 
