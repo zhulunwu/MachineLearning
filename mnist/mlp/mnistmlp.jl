@@ -1,5 +1,5 @@
 using Flux
-using Flux: onehot,crossentropy,chunk,batch,throttle
+using Flux: onehot,crossentropy,chunk,batch,throttle,onecold
 using Flux: @epochs
 using Statistics
 
@@ -13,9 +13,9 @@ end
 
 # 读入图像和标签
 images = img2vec.(minst_images())
-labels = map(x->onehot(x,0:9),minst_labels())
+labels = onehot.(minst_labels(),[0:9])
 
-nparts=6000
+nparts=600
 images_batch=chunk(images,nparts)
 labels_batch=chunk(labels,nparts)
 images_matrix=batch.(images_batch)
@@ -39,8 +39,16 @@ end
 
 @epochs 5 Flux.train!(loss, params(m),dataset,RMSProp(0.0001),cb=throttle(showloss,1))
 
-# 模型的使用
+# 模型的使用和评估
 image_test = img2vec.(minst_images(:test))
 label_test = minst_labels(:test)
-predicts=argmax.(m.(image_test)).-1
+predicts=onecold.(m.(image_test),[0:9])
 mean(label_test .== predicts)
+
+# 单样本训练
+dataset=zip(images,labels)
+@epochs 5 Flux.train!(loss, params(m),dataset,RMSProp(0.0001),cb=throttle(showloss,1))
+
+# 显示训练次数
+n=0
+Flux.train!(loss, params(m),dataset,RMSProp(0.0001),cb=()->begin global n;print("\rn=",n); n+=1;end)
