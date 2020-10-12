@@ -1,10 +1,11 @@
 using Flux
 
+const data_root=Sys.iswindows() ? "D:/" : "/mnt"
 const colorfactor=Float32(1.0/255.0)
 
 # 训练集,5个文件，i不超过5.
 function readDataset(i::Int)
-    file="D:/Explore/DataSets/cifar-10-batches-bin/data_batch_$(i).bin"
+    file=data_root*"/Explore/DataSets/cifar-10-batches-bin/data_batch_$(i).bin"
     data_bytes=open(file,"r") do io
         [(read(io,UInt8),read(io,32*32*3)) for i=1:10000]
     end
@@ -30,7 +31,7 @@ end
 
 function test_image_label()
     # 测试集
-    file="D:/Explore/DataSets/cifar-10-batches-bin/test_batch.bin"
+    file=data_root*"/Explore/DataSets/cifar-10-batches-bin/test_batch.bin"
     test_bytes=open(file,"r") do io
         [(read(io,UInt8),read(io,32*32*3)) for i=1:10000]
     end
