@@ -22,11 +22,9 @@ function train_image_label(i::Int)
         b=reshape(transpose(reshape(x[:,3],(32,32))),(32,32,1))
         cat(r,g,b,dims=3)
     end
-    imgs=map(x->Float32.(x)*colorfactor,images) #最终的训练图像数据
-    
-    label_bytes=map(first,label_image_bytes)
-
-    return imgs,label_bytes
+    train_images=map(x->Float32.(x)*colorfactor,images) #最终的训练图像数据    
+    train_labels=map(first,label_image_bytes)
+    return train_images,train_labels
 end
 
 function test_image_label()
@@ -44,9 +42,7 @@ function test_image_label()
         b=reshape(transpose(reshape(x[:,3],(32,32))),(32,32,1))
         cat(r,g,b,dims=3)
     end
-    testimgs=map(x->Float32.(x)*colorfactor,imgs_test)
-
-    lbls_bytes=map(first,test_bytes) # 测试标签
-
-    return testimgs,lbls_bytes
+    test_images=map(x->Float32.(x)*colorfactor,imgs_test)
+    test_labels=map(first,test_bytes) # 测试标签
+    return test_images,test_labels
 end
