@@ -1,5 +1,5 @@
 using PyCall
-import Flux.onecold
+import Flux:@epochs
 
 include("data.jl")
 
@@ -21,17 +21,19 @@ model.compile(optimizer="adam",loss=tf.keras.losses.SparseCategoricalCrossentrop
 # data
 adddims(x)=reshape(x,(1,size(x)...))
 
-for i=1:5
-    global model
-    images_train,labels_train=train_image_label(i)
-    train_images=vcat(adddims.(images_train)...)
-    train_labels=onecold(labels_train,Int8.(0:9))
-    model.fit(train_images,train_labels, epochs=10)
+function train()
+    for i=1:5
+        global model
+        images_train,labels_train=train_image_label(i)
+        images_train_batch=reduce(vcat,adddims.(images_train))
+        labels_train_batch=Int8.(labels_train)
+        model.fit(images_train_batch,labels_train_batch)
+    end
 end
+@epochs 5 train()
 
+# 识别率计算
 images_test, labels_test=test_image_label()
-test_images=vcat(adddims.(images_test)...)
+test_images=reduce(vcat,adddims.(images_test))
 test_labels=Int8.(labels_test)
 model.evaluate(test_images,test_labels)
-
-
